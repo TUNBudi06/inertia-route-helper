@@ -1,4 +1,4 @@
-# API Reference - inertia-route-helper
+﻿# API Reference - inertia-route-helper
 
 Complete API documentation for all functions and types.
 
@@ -39,7 +39,7 @@ function initRouteHelper(data: any): void
 ```typescript
 // React/Vue - Pass props from createInertiaApp
 import { createInertiaApp } from '@inertiajs/react';
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 createInertiaApp({
   setup({ el, App, props }) {
@@ -50,7 +50,7 @@ createInertiaApp({
 
 // Svelte - Can use props or $page
 import { page } from '@inertiajs/svelte';
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 initRouteHelper(props);  // or
 initRouteHelper($page);
@@ -78,7 +78,7 @@ function route<T extends AnyRoute>(routeDefinition: T): T
 **Examples:**
 
 ```typescript
-import { route } from 'inertia-route-helper';
+import { route } from '@tunbudi06/inertia-route-helper';
 
 // Simple route
 const dashboardRoute = route({ url: '/dashboard', method: 'GET' });
@@ -110,7 +110,7 @@ function routeUrl<T extends AnyRoute>(routeDefinition: T): string
 **Examples:**
 
 ```typescript
-import { routeUrl } from 'inertia-route-helper';
+import { routeUrl } from '@tunbudi06/inertia-route-helper';
 import { users, posts } from '@/routes';
 
 // Simple URL
@@ -157,7 +157,7 @@ function buildRoute(
 **Examples:**
 
 ```typescript
-import { buildRoute } from 'inertia-route-helper';
+import { buildRoute } from '@tunbudi06/inertia-route-helper';
 
 // Simple query parameters
 const url1 = buildRoute('/search', {
@@ -216,7 +216,7 @@ function makeRoute(definition: RouteDefinition): string
 **Examples:**
 
 ```typescript
-import { makeRoute } from 'inertia-route-helper';
+import { makeRoute } from '@tunbudi06/inertia-route-helper';
 
 // Simple route with query
 const url1 = makeRoute({
@@ -270,7 +270,7 @@ function isCurrentRoute(path: string, exact?: boolean): boolean
 **Examples:**
 
 ```typescript
-import { isCurrentRoute } from 'inertia-route-helper';
+import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Assuming current URL: https://example.com/dashboard/settings
 
@@ -334,7 +334,7 @@ function currentPath(): string
 **Examples:**
 
 ```typescript
-import { currentPath } from 'inertia-route-helper';
+import { currentPath } from '@tunbudi06/inertia-route-helper';
 
 const path = currentPath();
 // '/dashboard/settings'
@@ -367,7 +367,7 @@ function currentUrl(): string
 **Examples:**
 
 ```typescript
-import { currentUrl } from 'inertia-route-helper';
+import { currentUrl } from '@tunbudi06/inertia-route-helper';
 
 const url = currentUrl();
 // 'https://example.com/dashboard/settings?tab=profile#personal-info'
@@ -404,7 +404,7 @@ function configure(options: RouteHelperConfig): void
 **Examples:**
 
 ```typescript
-import { configure } from 'inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper';
 
 // Basic configuration
 configure({
@@ -449,7 +449,7 @@ function setBaseUrl(url: string): void
 **Examples:**
 
 ```typescript
-import { setBaseUrl } from 'inertia-route-helper';
+import { setBaseUrl } from '@tunbudi06/inertia-route-helper';
 
 // Set custom base URL
 setBaseUrl('https://example.com');
@@ -481,7 +481,7 @@ function getBaseUrl(): string
 **Examples:**
 
 ```typescript
-import { getBaseUrl } from 'inertia-route-helper';
+import { getBaseUrl } from '@tunbudi06/inertia-route-helper';
 
 const baseUrl = getBaseUrl();
 // 'https://example.com'
@@ -601,7 +601,7 @@ import {
   configure,
   setBaseUrl,
   getBaseUrl
-} from 'inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper';
 
 // Types
 import type {
@@ -610,7 +610,7 @@ import type {
   QueryParams,
   RouteParams,
   RouteHelperConfig
-} from 'inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper';
 ```
 
 ---
@@ -624,3 +624,5 @@ All navigation helper functions are SSR-safe:
 - `currentUrl()` - Returns empty string in SSR context
 
 Core route building functions work in both SSR and client contexts.
+
+

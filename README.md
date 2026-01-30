@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/inertia-route-helper.svg)](https://www.npmjs.com/package/inertia-route-helper)
+[![npm version](https://img.shields.io/npm/v/inertia-route-helper.svg)](https://www.npmjs.com/package/@tunbudi06/inertia-route-helper)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 

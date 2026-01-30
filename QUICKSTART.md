@@ -1,18 +1,18 @@
-# 🚀 Quick Start Guide - Inertia Route Helper
+﻿# ðŸš€ Quick Start Guide - Inertia Route Helper
 
 Get started with **inertia-route-helper** in just a few minutes!
 
 ---
 
-## 📦 Step 1: Install
+## ðŸ“¦ Step 1: Install
 
 ```bash
-npm install inertia-route-helper
+npm install @tunbudi06/inertia-route-helper
 ```
 
 ---
 
-## ⚙️ Step 2: Initialize in Your App
+## âš™ï¸ Step 2: Initialize in Your App
 
 **Just pass `props` - the helper finds `initialPage.props.baseUrl` automatically:**
 
@@ -22,7 +22,7 @@ npm install inertia-route-helper
 // resources/js/app.ts
 import { createInertiaApp, type ResolvedComponent } from '@inertiajs/svelte';
 import { hydrate, mount } from 'svelte';
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 createInertiaApp({
     resolve: (name: string) => {
@@ -47,7 +47,7 @@ createInertiaApp({
 ```typescript
 // resources/js/app.tsx
 import { createInertiaApp } from '@inertiajs/react';
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 createInertiaApp({
     // ...existing code...
@@ -64,7 +64,7 @@ createInertiaApp({
 ```typescript
 // resources/js/app.ts
 import { createInertiaApp } from '@inertiajs/vue3';
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 createInertiaApp({
     // ...existing code...
@@ -96,7 +96,7 @@ This makes `baseUrl` available in `$page.props.baseUrl` for the initialization a
 
 ---
 
-## 🎯 Step 3: Use the Helper Functions
+## ðŸŽ¯ Step 3: Use the Helper Functions
 
 ### Import Functions
 
@@ -110,7 +110,7 @@ import {
   currentPath,
   currentUrl,
   configure
-} from 'inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper';
 ```
 
 ### Core Functions
@@ -118,7 +118,7 @@ import {
 #### 1. `route()` - Transform Route Objects
 
 ```typescript
-import { route } from 'inertia-route-helper';
+import { route } from '@tunbudi06/inertia-route-helper';
 import { dashboard } from '@/routes';
 
 const dashboardRoute = route(dashboard());
@@ -128,7 +128,7 @@ const dashboardRoute = route(dashboard());
 #### 2. `routeUrl()` - Get URL String
 
 ```typescript
-import { routeUrl } from 'inertia-route-helper';
+import { routeUrl } from '@tunbudi06/inertia-route-helper';
 import { users } from '@/routes';
 
 const url = routeUrl(users.show({ id: 123 }));
@@ -138,7 +138,7 @@ const url = routeUrl(users.show({ id: 123 }));
 #### 3. `buildRoute()` - Build URLs with Query Params
 
 ```typescript
-import { buildRoute } from 'inertia-route-helper';
+import { buildRoute } from '@tunbudi06/inertia-route-helper';
 
 // Simple query params
 const searchUrl = buildRoute('/search', {
@@ -161,7 +161,7 @@ const relativeUrl = buildRoute('/api/users', { absolute: false });
 #### 4. `isCurrentRoute()` - Check Active Routes
 
 ```typescript
-import { isCurrentRoute } from 'inertia-route-helper';
+import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Use for navigation highlighting
 const isActive = isCurrentRoute('/dashboard');
@@ -171,7 +171,7 @@ const isExact = isCurrentRoute('/dashboard', true);
 #### 5. Navigation Helpers
 
 ```typescript
-import { currentPath, currentUrl } from 'inertia-route-helper';
+import { currentPath, currentUrl } from '@tunbudi06/inertia-route-helper';
 
 const path = currentPath(); // '/dashboard/settings'
 const url = currentUrl();   // 'https://example.com/dashboard/settings'
@@ -179,7 +179,7 @@ const url = currentUrl();   // 'https://example.com/dashboard/settings'
 
 ---
 
-## 📝 API Quick Reference
+## ðŸ“ API Quick Reference
 
 | Function | Purpose |
 |----------|---------|
@@ -195,13 +195,13 @@ const url = currentUrl();   // 'https://example.com/dashboard/settings'
 
 ---
 
-## 🎯 Step 4: Use in Your Components
+## ðŸŽ¯ Step 4: Use in Your Components
 
 ### React/TypeScript
 
 ```tsx
 import { Link } from '@inertiajs/react';
-import { routeUrl, isCurrentRoute } from 'inertia-route-helper';
+import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 import { dashboard, profile } from '@/routes';
 
 export default function Navigation({ userId }: { userId: number }) {
@@ -227,7 +227,7 @@ export default function Navigation({ userId }: { userId: number }) {
 ```vue
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { routeUrl, isCurrentRoute } from 'inertia-route-helper';
+import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 import { dashboard, profile } from '@/routes';
 
 const props = defineProps<{ userId: number }>();
@@ -253,7 +253,7 @@ const props = defineProps<{ userId: number }>();
 
 ```svelte
 <script lang="ts">
-  import { routeUrl, isCurrentRoute } from 'inertia-route-helper';
+  import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
   import { dashboard, profile } from '$lib/routes';
   
   export let userId: number;
@@ -275,12 +275,12 @@ const props = defineProps<{ userId: number }>();
 
 ---
 
-## 🎨 Common Use Cases
+## ðŸŽ¨ Common Use Cases
 
 ### Build Search URLs with Query Parameters
 
 ```typescript
-import { buildRoute } from 'inertia-route-helper';
+import { buildRoute } from '@tunbudi06/inertia-route-helper';
 
 const searchUrl = buildRoute('/search', {
   query: {
@@ -295,7 +295,7 @@ const searchUrl = buildRoute('/search', {
 ### Highlight Active Navigation
 
 ```typescript
-import { isCurrentRoute } from 'inertia-route-helper';
+import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Partial match (matches /dashboard, /dashboard/settings, etc.)
 const isDashboard = isCurrentRoute('/dashboard');
@@ -308,7 +308,7 @@ const isExactDashboard = isCurrentRoute('/dashboard', true);
 
 ```typescript
 import { router } from '@inertiajs/react';
-import { routeUrl } from 'inertia-route-helper';
+import { routeUrl } from '@tunbudi06/inertia-route-helper';
 import { posts } from '@/routes';
 
 function handleSubmit(formData: FormData) {
@@ -318,7 +318,7 @@ function handleSubmit(formData: FormData) {
 
 ---
 
-## 🌐 Subfolder Deployments
+## ðŸŒ Subfolder Deployments
 
 If your app is deployed in a subfolder, just set your `APP_URL`:
 
@@ -331,15 +331,15 @@ The package automatically handles everything! All URLs will be prefixed correctl
 
 ```typescript
 routeUrl(dashboard())
-// ✅ https://example.com/my-app/dashboard
+// âœ… https://example.com/my-app/dashboard
 ```
 
 ---
 
-## 🔧 Advanced Configuration
+## ðŸ”§ Advanced Configuration
 
 ```typescript
-import { configure } from 'inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper';
 
 // Optional: Configure global behavior
 configure({
@@ -351,17 +351,19 @@ configure({
 
 ---
 
-## 📚 Need More Help?
+## ðŸ“š Need More Help?
 
-- 📖 **Full Documentation**: Check the [README.md](./README.md)
-- 💡 **Examples**: See [examples/](./examples/) for complete examples
-- 🐛 **Issues**: Report bugs on [GitHub Issues](https://github.com/TUNBudi06/inertia-route-helper/issues)
-- 💬 **Questions**: Ask on [GitHub Discussions](https://github.com/TUNBudi06/inertia-route-helper/discussions)
+- ðŸ“– **Full Documentation**: Check the [README.md](./README.md)
+- ðŸ’¡ **Examples**: See [examples/](./examples/) for complete examples
+- ðŸ› **Issues**: Report bugs on [GitHub Issues](https://github.com/TUNBudi06/inertia-route-helper/issues)
+- ðŸ’¬ **Questions**: Ask on [GitHub Discussions](https://github.com/TUNBudi06/inertia-route-helper/discussions)
 
 ---
 
-## ✅ You're Ready!
+## âœ… You're Ready!
 
 That's it! You're now ready to use **inertia-route-helper** in your project.
 
-Happy coding! 🎉
+Happy coding! ðŸŽ‰
+
+
