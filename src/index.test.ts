@@ -50,8 +50,23 @@ describe('route functions', () => {
       expect(result.name).toBe('users');
     });
 
-    it('should use window.location.origin if baseUrl is not set', () => {
-      setBaseUrl('');
+    it('should auto-detect from window.location if baseUrl is not set', () => {
+      setBaseUrl(''); // Clear base URL
+
+      // Set window.location for auto-detection
+      Object.defineProperty(window, 'location', {
+        value: {
+          protocol: 'https:',
+          hostname: 'example.com',
+          port: '',
+          origin: 'https://example.com',
+          pathname: '/dashboard',
+          href: 'https://example.com/dashboard',
+        },
+        writable: true,
+        configurable: true,
+      });
+
       const result = route({ url: '/dashboard' });
       expect(result.url).toBe('https://example.com/dashboard');
     });

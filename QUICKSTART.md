@@ -12,9 +12,74 @@ npm install inertia-route-helper
 
 ---
 
-## ⚙️ Step 2: Laravel Setup
+## ⚙️ Step 2: Initialize in Your App
 
-Add to your `HandleInertiaRequests` middleware:
+**Just pass `props` - the helper finds `initialPage.props.baseUrl` automatically:**
+
+### Svelte
+
+```typescript
+// resources/js/app.ts
+import { createInertiaApp, type ResolvedComponent } from '@inertiajs/svelte';
+import { hydrate, mount } from 'svelte';
+import { initRouteHelper } from 'inertia-route-helper';
+
+createInertiaApp({
+    resolve: (name: string) => {
+        const pages = import.meta.glob<ResolvedComponent>('./Pages/**/*.svelte');
+        return pages[`./Pages/${name}.svelte`]();
+    },
+    setup({ el, App, props }) {
+        // Just pass props - super simple!
+        initRouteHelper(props);
+        
+        if (el && el.dataset.serverRendered === 'true') {
+            hydrate(App, { target: el, props });
+        } else if (el) {
+            mount(App, { target: el, props });
+        }
+    },
+});
+```
+
+### React
+
+```typescript
+// resources/js/app.tsx
+import { createInertiaApp } from '@inertiajs/react';
+import { initRouteHelper } from 'inertia-route-helper';
+
+createInertiaApp({
+    // ...existing code...
+    setup({ el, App, props }) {
+        initRouteHelper(props);
+        const root = createRoot(el);
+        root.render(<App {...props} />);
+    },
+});
+```
+
+### Vue 3
+
+```typescript
+// resources/js/app.ts
+import { createInertiaApp } from '@inertiajs/vue3';
+import { initRouteHelper } from 'inertia-route-helper';
+
+createInertiaApp({
+    // ...existing code...
+    setup({ el, App, props }) {
+        initRouteHelper(props);
+        createApp({ render: () => h(App, props) }).mount(el);
+    },
+});
+```
+
+**That's it!** One line, super clean.
+
+### Laravel Setup (Required)
+
+**Share your base URL with Inertia:**
 
 ```php
 // app/Http/Middleware/HandleInertiaRequests.php
@@ -27,9 +92,110 @@ public function share(Request $request): array
 }
 ```
 
+This makes `baseUrl` available in `$page.props.baseUrl` for the initialization above.
+
 ---
 
-## 🎯 Step 3: Use in Your Components
+## 🎯 Step 3: Use the Helper Functions
+
+### Import Functions
+
+```typescript
+import {
+  route,
+  routeUrl,
+  buildRoute,
+  makeRoute,
+  isCurrentRoute,
+  currentPath,
+  currentUrl,
+  configure
+} from 'inertia-route-helper';
+```
+
+### Core Functions
+
+#### 1. `route()` - Transform Route Objects
+
+```typescript
+import { route } from 'inertia-route-helper';
+import { dashboard } from '@/routes';
+
+const dashboardRoute = route(dashboard());
+// { url: 'https://example.com/dashboard', ...otherProps }
+```
+
+#### 2. `routeUrl()` - Get URL String
+
+```typescript
+import { routeUrl } from 'inertia-route-helper';
+import { users } from '@/routes';
+
+const url = routeUrl(users.show({ id: 123 }));
+// 'https://example.com/users/123'
+```
+
+#### 3. `buildRoute()` - Build URLs with Query Params
+
+```typescript
+import { buildRoute } from 'inertia-route-helper';
+
+// Simple query params
+const searchUrl = buildRoute('/search', {
+  query: { q: 'test', page: 2 },
+  fragment: 'results'
+});
+// 'https://example.com/search?q=test&page=2#results'
+
+// Array parameters
+const filtersUrl = buildRoute('/products', {
+  query: { tags: ['new', 'featured'] }
+});
+// 'https://example.com/products?tags[]=new&tags[]=featured'
+
+// Relative URL
+const relativeUrl = buildRoute('/api/users', { absolute: false });
+// '/api/users'
+```
+
+#### 4. `isCurrentRoute()` - Check Active Routes
+
+```typescript
+import { isCurrentRoute } from 'inertia-route-helper';
+
+// Use for navigation highlighting
+const isActive = isCurrentRoute('/dashboard');
+const isExact = isCurrentRoute('/dashboard', true);
+```
+
+#### 5. Navigation Helpers
+
+```typescript
+import { currentPath, currentUrl } from 'inertia-route-helper';
+
+const path = currentPath(); // '/dashboard/settings'
+const url = currentUrl();   // 'https://example.com/dashboard/settings'
+```
+
+---
+
+## 📝 API Quick Reference
+
+| Function | Purpose |
+|----------|---------|
+| `initRouteHelper(props)` | Initialize with Inertia props |
+| `route(def)` | Get route with absolute URL |
+| `routeUrl(def)` | Get URL string only |
+| `buildRoute(path, opts)` | Build URL with query/fragment |
+| `makeRoute(def)` | Build from object |
+| `isCurrentRoute(path, exact?)` | Check if route is active |
+| `currentPath()` | Get current pathname |
+| `currentUrl()` | Get full current URL |
+| `configure(opts)` | Global configuration |
+
+---
+
+## 🎯 Step 4: Use in Your Components
 
 ### React/TypeScript
 

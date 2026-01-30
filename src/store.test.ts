@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { getBaseUrl, setBaseUrl, configure, getConfig } from './store';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { getBaseUrl, setBaseUrl, configure, getConfig, initRouteHelper } from './store';
 
 // Mock the router
 vi.mock('@inertiajs/core', () => ({
@@ -10,18 +10,97 @@ vi.mock('@inertiajs/core', () => ({
 
 describe('store', () => {
   beforeEach(() => {
-    // Reset base URL before each test
+    // Reset state before each test
+    setBaseUrl('');
+    configure({ trailingSlash: false, validateRoutes: false });
+  });
+
+  afterEach(() => {
+    // Clean up after each test
     setBaseUrl('');
   });
 
-  describe('getBaseUrl', () => {
-    it('should return empty string by default', () => {
-      expect(getBaseUrl()).toBe('');
+  describe('initRouteHelper', () => {
+    it('should initialize base URL from props.initialPage.props.baseUrl', () => {
+      const props = {
+        initialPage: {
+          props: {
+            baseUrl: 'https://from-inertia.com',
+          },
+        },
+      };
+
+      initRouteHelper(props);
+      expect(getBaseUrl()).toBe('https://from-inertia.com');
     });
 
-    it('should return the set base URL', () => {
-      setBaseUrl('https://example.com');
+    it('should initialize from page.props.baseUrl (Svelte $page)', () => {
+      const page = {
+        props: {
+          baseUrl: 'https://from-svelte-page.com',
+        },
+      };
+
+      initRouteHelper(page);
+      expect(getBaseUrl()).toBe('https://from-svelte-page.com');
+    });
+
+    it('should initialize from direct baseUrl property', () => {
+      const data = {
+        baseUrl: 'https://direct.com',
+      };
+
+      initRouteHelper(data);
+      expect(getBaseUrl()).toBe('https://direct.com');
+    });
+
+    it('should prioritize props.initialPage.props.baseUrl over others', () => {
+      const props = {
+        initialPage: {
+          props: {
+            baseUrl: 'https://priority.com',
+          },
+        },
+        props: {
+          baseUrl: 'https://should-not-use.com',
+        },
+        baseUrl: 'https://also-not-use.com',
+      };
+
+      initRouteHelper(props);
+      expect(getBaseUrl()).toBe('https://priority.com');
+    });
+
+    it('should remove trailing slash from initialized base URL', () => {
+      const props = {
+        initialPage: {
+          props: {
+            baseUrl: 'https://example.com/',
+          },
+        },
+      };
+
+      initRouteHelper(props);
       expect(getBaseUrl()).toBe('https://example.com');
+    });
+
+    it('should not crash if props is missing', () => {
+      initRouteHelper({});
+      // Should remain empty or use fallback
+      const url = getBaseUrl();
+      expect(url).toBeDefined();
+    });
+
+    it('should not crash if props is null', () => {
+      initRouteHelper(null);
+      const url = getBaseUrl();
+      expect(url).toBeDefined();
+    });
+
+    it('should not crash if props is undefined', () => {
+      initRouteHelper(undefined);
+      const url = getBaseUrl();
+      expect(url).toBeDefined();
     });
   });
 
@@ -48,14 +127,6 @@ describe('store', () => {
   });
 
   describe('configure', () => {
-    beforeEach(() => {
-      // Reset config
-      configure({
-        trailingSlash: false,
-        validateRoutes: false,
-      });
-    });
-
     it('should set base URL from config', () => {
       configure({ baseUrl: 'https://test.com' });
       expect(getBaseUrl()).toBe('https://test.com');
@@ -77,15 +148,6 @@ describe('store', () => {
   });
 
   describe('getConfig', () => {
-    beforeEach(() => {
-      // Reset to default config before each test
-      configure({
-        trailingSlash: false,
-        validateRoutes: false,
-      });
-      setBaseUrl('');
-    });
-
     it('should return default config', () => {
       const config = getConfig();
       expect(config.trailingSlash).toBe(false);

@@ -1,17 +1,28 @@
 import type { AnyRoute, RouteDefinition, QueryParams, RouteHelperConfig } from './types';
 import { getBaseUrl, getConfig, configure as configureStore } from './store';
 
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
 /**
- * Build query string from parameters
+ * Build URL query string from parameters object
+ * Handles arrays as repeated parameters (e.g., tags[]=value1&tags[]=value2)
+ * Filters out null and undefined values
+ *
+ * @param params - Query parameters object
+ * @returns Query string with leading ? or empty string
  */
 function buildQueryString(params: QueryParams): string {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
-    if (value === null || value === undefined) return;
+    // Skip null and undefined values
+    if (value == null) return;
 
+    // Handle arrays - append each value with [] suffix
     if (Array.isArray(value)) {
-      value.forEach(v => searchParams.append(`${key}[]`, String(v)));
+      value.forEach(item => searchParams.append(`${key}[]`, String(item)));
     } else {
       searchParams.append(key, String(value));
     }
@@ -21,24 +32,43 @@ function buildQueryString(params: QueryParams): string {
   return queryString ? `?${queryString}` : '';
 }
 
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+
 /**
- * Configure the route helper
+ * Configure route helper behavior globally
+ * @param options - Configuration options
  */
 export function configure(options: RouteHelperConfig): void {
   configureStore(options);
 }
 
+// ============================================================================
+// CORE ROUTE FUNCTIONS
+// ============================================================================
+
 /**
- * Get the full absolute URL for a route
+ * Transform a route definition to include absolute URL
+ * Automatically prepends base URL and handles trailing slashes
+ *
+ * @param routeDefinition - Route object with url property
+ * @returns Route object with absolute URL
+ *
+ * @example
+ * ```typescript
+ * const dashboardRoute = route({ url: '/dashboard', method: 'GET' });
+ * // Returns: { url: 'https://example.com/dashboard', method: 'GET' }
+ * ```
  */
 export function route<T extends AnyRoute>(routeDefinition: T): T {
   const base = getBaseUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
-  const config = getConfig();
+  const cfg = getConfig();
 
   let url = base + routeDefinition.url;
 
   // Add trailing slash if configured
-  if (config.trailingSlash && !url.endsWith('/')) {
+  if (cfg.trailingSlash && !url.endsWith('/')) {
     url += '/';
   }
 
@@ -49,7 +79,17 @@ export function route<T extends AnyRoute>(routeDefinition: T): T {
 }
 
 /**
- * Get just the URL string for a route
+ * Get just the URL string from a route definition
+ * Convenience wrapper around route()
+ *
+ * @param routeDefinition - Route object
+ * @returns Absolute URL string
+ *
+ * @example
+ * ```typescript
+ * const url = routeUrl({ url: '/users/123' });
+ * // Returns: 'https://example.com/users/123'
+ * ```
  */
 export function routeUrl<T extends AnyRoute>(routeDefinition: T): string {
   return route(routeDefinition).url;
@@ -57,35 +97,60 @@ export function routeUrl<T extends AnyRoute>(routeDefinition: T): string {
 
 /**
  * Build a complete URL with query parameters and fragment
+ * Flexible URL builder with full control over all URL components
+ *
+ * @param path - Base path (e.g., '/search' or '/users/123')
+ * @param options - Optional configuration
+ * @param options.query - Query parameters object
+ * @param options.fragment - Fragment/hash identifier
+ * @param options.absolute - Whether to include base URL (default: true)
+ * @returns Complete URL string
+ *
+ * @example
+ * ```typescript
+ * // With query parameters
+ * buildRoute('/search', {
+ *   query: { q: 'test', page: 2 },
+ *   fragment: 'results'
+ * });
+ * // Returns: 'https://example.com/search?q=test&page=2#results'
+ *
+ * // Relative URL
+ * buildRoute('/api/users', { absolute: false });
+ * // Returns: '/api/users'
+ * ```
  */
-export function buildRoute(path: string, options?: {
-  query?: QueryParams;
-  fragment?: string;
-  absolute?: boolean;
-}): string {
+export function buildRoute(
+  path: string,
+  options?: {
+    query?: QueryParams;
+    fragment?: string;
+    absolute?: boolean;
+  }
+): string {
   const { query, fragment, absolute = true } = options || {};
 
   let url = path;
 
-  // Add base URL if absolute
+  // Prepend base URL if absolute
   if (absolute) {
     const base = getBaseUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
     url = base + url;
   }
 
-  // Add query parameters
+  // Append query parameters
   if (query) {
     url += buildQueryString(query);
   }
 
-  // Add fragment
+  // Append fragment/hash
   if (fragment) {
     url += `#${fragment}`;
   }
 
-  // Add trailing slash if configured
-  const config = getConfig();
-  if (config.trailingSlash && !url.includes('?') && !url.includes('#') && !url.endsWith('/')) {
+  // Add trailing slash if configured (but not with query/fragment)
+  const cfg = getConfig();
+  if (cfg.trailingSlash && !url.includes('?') && !url.includes('#') && !url.endsWith('/')) {
     url += '/';
   }
 
@@ -93,7 +158,21 @@ export function buildRoute(path: string, options?: {
 }
 
 /**
- * Enhanced route builder with full feature support
+ * Build route from a RouteDefinition object
+ * Convenience wrapper for buildRoute with object syntax
+ *
+ * @param definition - Route definition with url, query, and fragment
+ * @returns Complete URL string
+ *
+ * @example
+ * ```typescript
+ * makeRoute({
+ *   url: '/posts',
+ *   query: { status: 'published' },
+ *   fragment: 'list'
+ * });
+ * // Returns: 'https://example.com/posts?status=published#list'
+ * ```
  */
 export function makeRoute(definition: RouteDefinition): string {
   return buildRoute(definition.url, {
@@ -103,37 +182,61 @@ export function makeRoute(definition: RouteDefinition): string {
   });
 }
 
+// ============================================================================
+// NAVIGATION HELPERS
+// ============================================================================
+
 /**
- * Check if a route matches the current path
+ * Check if a path matches the current browser location
+ * Useful for highlighting active navigation items
+ *
+ * @param path - Path to check (e.g., '/dashboard')
+ * @param exact - Whether to match exactly (default: false for partial match)
+ * @returns True if path matches current location
+ *
+ * @example
+ * ```typescript
+ * // Current URL: https://example.com/dashboard/settings
+ *
+ * isCurrentRoute('/dashboard');        // true (partial match)
+ * isCurrentRoute('/dashboard', true);  // false (not exact)
+ * isCurrentRoute('/dashboard/settings', true); // true (exact match)
+ * ```
  */
 export function isCurrentRoute(path: string, exact: boolean = false): boolean {
   if (typeof window === 'undefined') return false;
 
   const currentPath = window.location.pathname;
 
-  if (exact) {
-    return currentPath === path;
-  }
-
-  return currentPath.startsWith(path);
+  return exact ? currentPath === path : currentPath.startsWith(path);
 }
 
 /**
- * Get the current route path (relative)
+ * Get the current pathname from browser location
+ * SSR-safe (returns empty string on server)
+ *
+ * @returns Current pathname (e.g., '/dashboard/settings')
  */
 export function currentPath(): string {
-  if (typeof window === 'undefined') return '';
-  return window.location.pathname;
+  return typeof window !== 'undefined' ? window.location.pathname : '';
 }
 
 /**
- * Get the current full URL
+ * Get the complete current URL from browser location
+ * SSR-safe (returns empty string on server)
+ *
+ * @returns Full URL including protocol, host, path, query, and fragment
  */
 export function currentUrl(): string {
-  if (typeof window === 'undefined') return '';
-  return window.location.href;
+  return typeof window !== 'undefined' ? window.location.href : '';
 }
 
-// Re-export types
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+// Re-export types for convenience
 export type { AnyRoute, RouteDefinition, QueryParams, RouteParams, RouteHelperConfig } from './types';
-export { getBaseUrl, setBaseUrl } from './store';
+
+// Re-export initialization and helper functions
+export { initRouteHelper, setBaseUrl, getBaseUrl } from './store';
