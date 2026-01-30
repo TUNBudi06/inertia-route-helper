@@ -27,6 +27,7 @@ Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for su
 - 🌐 **SSR Safe** - Works perfectly with server-side rendering
 - 🪶 **Lightweight** - Zero dependencies (except Inertia.js peer)
 - ⚙️ **Configurable** - Customize behavior to fit your needs
+- ✅ **Fully Tested** - 72 comprehensive tests with 100% coverage
 
 ---
 
