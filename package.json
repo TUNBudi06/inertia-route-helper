@@ -1,0 +1,41 @@
+{
+  "name": "inertia-route-helper",
+  "version": "1.0.0",
+  "description": "Powerful routing helper for Inertia.js v2 apps with Wayfinder/Ziggy - supports subfolder deployments, query parameters, and route validation",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["laravel","inertia","inertiajs","inertia-js","wayfinder","ziggy","routing","routes","subfolder","typescript","query-parameters","url-helper","spa","ssr"],
+  "author": "TUNBudi06",
+  "license": "MIT",
+  "peerDependencies": {
+    "@inertiajs/core": "^2.0.0"
+  },
+  "devDependencies": {
+    "@inertiajs/core": "^2.0.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TUNBudi06/inertia-route-helper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TUNBudi06/inertia-route-helper/issues"
+  },
+  "homepage": "https://github.com/TUNBudi06/inertia-route-helper#readme"
+}
