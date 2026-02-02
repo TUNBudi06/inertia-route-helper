@@ -221,6 +221,7 @@ describe('route functions', () => {
       Object.defineProperty(window, 'location', {
         value: {
           pathname: '/dashboard/settings',
+          href: 'https://example.com/dashboard/settings',
         },
         writable: true,
       });
@@ -236,30 +237,86 @@ describe('route functions', () => {
 
     it('should return true for exact match when exact is true', () => {
       Object.defineProperty(window, 'location', {
-        value: { pathname: '/dashboard' },
+        value: {
+          pathname: '/dashboard',
+          href: 'https://example.com/dashboard',
+        },
         writable: true,
       });
-      expect(isCurrentRoute('/dashboard', true)).toBe(true);
+      expect(isCurrentRoute('/dashboard', false, true)).toBe(true);
     });
 
     it('should return false for partial match when exact is true', () => {
-      expect(isCurrentRoute('/dashboard', true)).toBe(false);
+      expect(isCurrentRoute('/dashboard', false, true)).toBe(false);
     });
 
     it('should handle root path', () => {
       Object.defineProperty(window, 'location', {
-        value: { pathname: '/' },
+        value: {
+          pathname: '/',
+          href: 'https://example.com/',
+        },
         writable: true,
       });
-      expect(isCurrentRoute('/', true)).toBe(true);
+      expect(isCurrentRoute('/', false, true)).toBe(true);
     });
 
     it('should handle paths with trailing slash', () => {
       Object.defineProperty(window, 'location', {
-        value: { pathname: '/dashboard/' },
+        value: {
+          pathname: '/dashboard/',
+          href: 'https://example.com/dashboard/',
+        },
         writable: true,
       });
       expect(isCurrentRoute('/dashboard')).toBe(true);
+    });
+
+    it('should use pathname by default (useHost false)', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          pathname: '/dashboard/settings',
+          href: 'https://example.com/dashboard/settings',
+        },
+        writable: true,
+      });
+      expect(isCurrentRoute('/dashboard', false)).toBe(true);
+      expect(isCurrentRoute('https://example.com/dashboard', false)).toBe(false);
+    });
+
+    it('should use full href when useHost is true', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          pathname: '/dashboard',
+          href: 'https://example.com/dashboard',
+        },
+        writable: true,
+      });
+      expect(isCurrentRoute('https://example.com/dashboard', true)).toBe(true);
+      expect(isCurrentRoute('/dashboard', true)).toBe(false);
+    });
+
+    it('should match partial href when useHost is true', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          pathname: '/dashboard/settings',
+          href: 'https://example.com/dashboard/settings',
+        },
+        writable: true,
+      });
+      expect(isCurrentRoute('https://example.com/dashboard', true)).toBe(true);
+    });
+
+    it('should match exact href when both exact and useHost are true', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          pathname: '/dashboard/settings',
+          href: 'https://example.com/dashboard/settings',
+        },
+        writable: true,
+      });
+      expect(isCurrentRoute('https://example.com/dashboard/settings', true, true)).toBe(true);
+      expect(isCurrentRoute('https://example.com/dashboard', true, true)).toBe(false);
     });
   });
 

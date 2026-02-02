@@ -95,7 +95,7 @@ describe('Integration Tests - Real-world Scenarios', () => {
       expect(isCurrentRoute('/dashboard/settings')).toBe(true);
 
       // Profile page (exact match)
-      expect(isCurrentRoute('/dashboard/settings/profile', true)).toBe(true);
+      expect(isCurrentRoute('/dashboard/settings/profile', false, true)).toBe(true);
 
       // Other menu items (no match)
       expect(isCurrentRoute('/users')).toBe(false);
