@@ -1,4 +1,4 @@
-﻿# API Reference - inertia-route-helper
+﻿﻿# API Reference - @tunbudi06/inertia-route-helper
 
 Complete API documentation for all functions and types.
 

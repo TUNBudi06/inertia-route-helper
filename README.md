@@ -44,15 +44,15 @@ Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for su
 ## 📦 Installation
 
 ```bash
-npm install inertia-route-helper
+npm install @tunbudi06/inertia-route-helper
 ```
 
 ```bash
-yarn add inertia-route-helper
+yarn add @tunbudi06/inertia-route-helper
 ```
 
 ```bash
-pnpm add inertia-route-helper
+pnpm add @tunbudi06/inertia-route-helper
 ```
 
 ---
@@ -62,7 +62,7 @@ pnpm add inertia-route-helper
 ### Installation
 
 ```bash
-npm install inertia-route-helper
+npm install @tunbudi06/inertia-route-helper
 ```
 
 ### Setup
@@ -72,7 +72,7 @@ npm install inertia-route-helper
 ```typescript
 // resources/js/app.tsx (React) or resources/js/app.ts (Vue/Svelte)
 import { createInertiaApp } from '@inertiajs/react'; // or vue3/svelte
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 createInertiaApp({
     resolve: (name) => {
@@ -106,7 +106,7 @@ public function share(Request $request): array
 ### Basic Usage
 
 ```typescript
-import { route, routeUrl, buildRoute } from 'inertia-route-helper';
+import { route, routeUrl, buildRoute } from '@tunbudi06/inertia-route-helper';
 import { dashboard, profile } from '@/routes'; // Your Ziggy/Wayfinder routes
 
 // Get the full route object with absolute URL
@@ -144,7 +144,7 @@ Initialize the route helper with Inertia props. Automatically extracts `baseUrl`
 - `data.baseUrl` (direct object)
 
 ```typescript
-import { initRouteHelper } from 'inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
 
 // React/Vue - Pass props from createInertiaApp
 createInertiaApp({
@@ -172,7 +172,7 @@ Transform a route definition to include absolute URL with base URL prepended.
 **Returns:** Route object with absolute URL
 
 ```typescript
-import { route } from 'inertia-route-helper';
+import { route } from '@tunbudi06/inertia-route-helper';
 
 const dashboardRoute = route({ url: '/dashboard', method: 'GET' });
 // { url: 'https://example.com/dashboard', method: 'GET' }
@@ -188,7 +188,7 @@ Get just the URL string from a route definition.
 **Returns:** Absolute URL string
 
 ```typescript
-import { routeUrl } from 'inertia-route-helper';
+import { routeUrl } from '@tunbudi06/inertia-route-helper';
 import { users } from '@/routes';
 
 const url = routeUrl(users.show({ id: 123 }));
@@ -209,7 +209,7 @@ Build a complete URL with query parameters and fragment.
 **Returns:** Complete URL string
 
 ```typescript
-import { buildRoute } from 'inertia-route-helper';
+import { buildRoute } from '@tunbudi06/inertia-route-helper';
 
 // With query parameters
 const url = buildRoute('/search', {
@@ -239,7 +239,7 @@ Build route from a RouteDefinition object (convenience wrapper).
 **Returns:** Complete URL string
 
 ```typescript
-import { makeRoute } from 'inertia-route-helper';
+import { makeRoute } from '@tunbudi06/inertia-route-helper';
 
 const url = makeRoute({
   url: '/posts',
@@ -264,7 +264,7 @@ Check if a path matches the current browser location.
 **Returns:** `true` if path matches current location
 
 ```typescript
-import { isCurrentRoute } from 'inertia-route-helper';
+import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Current URL: https://example.com/dashboard/settings
 
@@ -283,7 +283,7 @@ Get the current pathname from browser location (SSR-safe).
 **Returns:** Current pathname or empty string on server
 
 ```typescript
-import { currentPath } from 'inertia-route-helper';
+import { currentPath } from '@tunbudi06/inertia-route-helper';
 
 const path = currentPath();
 // '/dashboard/settings'
@@ -296,7 +296,7 @@ Get the complete current URL from browser location (SSR-safe).
 **Returns:** Full URL or empty string on server
 
 ```typescript
-import { currentUrl } from 'inertia-route-helper';
+import { currentUrl } from '@tunbudi06/inertia-route-helper';
 
 const url = currentUrl();
 // 'https://example.com/dashboard/settings?tab=profile#section'
@@ -317,7 +317,7 @@ Configure route helper behavior globally.
   - `validateRoutes?` - Enable route validation (default: false)
 
 ```typescript
-import { configure } from 'inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper';
 
 configure({
   baseUrl: 'https://custom-domain.com',
@@ -338,7 +338,7 @@ Manually set the base URL (for testing or advanced use cases).
 - `url` - Base URL string
 
 ```typescript
-import { setBaseUrl } from 'inertia-route-helper';
+import { setBaseUrl } from '@tunbudi06/inertia-route-helper';
 
 setBaseUrl('https://example.com');
 ```
@@ -350,7 +350,7 @@ Get the current base URL.
 **Returns:** Current base URL string
 
 ```typescript
-import { getBaseUrl } from 'inertia-route-helper';
+import { getBaseUrl } from '@tunbudi06/inertia-route-helper';
 
 const baseUrl = getBaseUrl();
 // 'https://example.com'
@@ -363,7 +363,7 @@ const baseUrl = getBaseUrl();
 ### Working with Ziggy Routes
 
 ```typescript
-import { route, routeUrl } from 'inertia-route-helper';
+import { route, routeUrl } from '@tunbudi06/inertia-route-helper';
 import { users, posts } from '@/routes';
 
 // Simple route
@@ -382,7 +382,7 @@ const postUrl = routeUrl(posts.edit({ post: 10, comment: 5 }));
 ### Building Routes with Query Parameters
 
 ```typescript
-import { buildRoute, makeRoute } from 'inertia-route-helper';
+import { buildRoute, makeRoute } from '@tunbudi06/inertia-route-helper';
 
 // Using buildRoute
 const productsUrl = buildRoute('/products', {
@@ -416,7 +416,7 @@ const searchUrl = makeRoute({
 ### Route Navigation & Validation
 
 ```typescript
-import { isCurrentRoute, currentPath, currentUrl } from 'inertia-route-helper';
+import { isCurrentRoute, currentPath, currentUrl } from '@tunbudi06/inertia-route-helper';
 
 // Check if a route is active (for navigation highlighting)
 const isActive = isCurrentRoute('/dashboard'); // Partial match
@@ -434,7 +434,7 @@ console.log(url); // https://example.com/dashboard/settings
 ### Configuration
 
 ```typescript
-import { configure } from 'inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper';
 
 // Configure the route helper
 configure({
@@ -447,7 +447,7 @@ configure({
 ### Manual Base URL Management
 
 ```typescript
-import { setBaseUrl, getBaseUrl } from 'inertia-route-helper';
+import { setBaseUrl, getBaseUrl } from '@tunbudi06/inertia-route-helper';
 
 // Manually set base URL (useful for testing or special cases)
 setBaseUrl('https://staging.example.com');
@@ -558,7 +558,7 @@ const base = getBaseUrl();
 
 ```tsx
 import { Link } from '@inertiajs/react';
-import { routeUrl, isCurrentRoute } from 'inertia-route-helper';
+import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 import { dashboard, profile, settings } from '@/routes';
 
 export function Navigation() {
@@ -591,7 +591,7 @@ export function Navigation() {
 ```vue
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { routeUrl, isCurrentRoute, buildRoute } from 'inertia-route-helper';
+import { routeUrl, isCurrentRoute, buildRoute } from '@tunbudi06/inertia-route-helper';
 import { posts, search } from '@/routes';
 
 const searchQuery = ref('');
@@ -626,7 +626,7 @@ const handleSearch = () => {
 ```svelte
 <script lang="ts">
   import { router } from '@inertiajs/svelte';
-  import { routeUrl, buildRoute, isCurrentRoute } from 'inertia-route-helper';
+  import { routeUrl, buildRoute, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
   import { products, categories } from '@/routes';
   
   let selectedCategory = 'all';
@@ -667,7 +667,7 @@ APP_URL=https://example.com/my-app
 ```
 
 ```typescript
-import { routeUrl } from 'inertia-route-helper';
+import { routeUrl } from '@tunbudi06/inertia-route-helper';
 import { dashboard } from '@/routes';
 
 const url = routeUrl(dashboard());
@@ -686,7 +686,7 @@ import type {
   RouteDefinition, 
   QueryParams, 
   RouteHelperConfig 
-} from 'inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper';
 
 const route: RouteDefinition = {
   url: '/users',

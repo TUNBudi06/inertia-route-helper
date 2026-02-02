@@ -1,6 +1,6 @@
-﻿# ðŸš€ Quick Start Guide - Inertia Route Helper
+﻿﻿# 🚀 Quick Start Guide - Inertia Route Helper
 
-Get started with **inertia-route-helper** in just a few minutes!
+Get started with **@tunbudi06/inertia-route-helper** in just a few minutes!
 
 ---
 

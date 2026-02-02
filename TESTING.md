@@ -1,6 +1,6 @@
 # 🧪 Testing Documentation
 
-Comprehensive test suite for **inertia-route-helper** v1.0.0
+Comprehensive test suite for **@tunbudi06/inertia-route-helper** v1.0.0
 
 ---
 
