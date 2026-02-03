@@ -1,6 +1,6 @@
 {
   "name": "@tunbudi06/inertia-route-helper",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Powerful routing helper for Inertia.js v2 apps with Wayfinder/Ziggy - supports subfolder deployments, query parameters, and route validation",
   "type": "module",
   "main": "dist/index.js",
