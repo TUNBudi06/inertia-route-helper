@@ -22,7 +22,7 @@ npm install @tunbudi06/inertia-route-helper
 // resources/js/app.ts
 import { createInertiaApp, type ResolvedComponent } from '@inertiajs/svelte';
 import { hydrate, mount } from 'svelte';
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 createInertiaApp({
     resolve: (name: string) => {
@@ -47,7 +47,7 @@ createInertiaApp({
 ```typescript
 // resources/js/app.tsx
 import { createInertiaApp } from '@inertiajs/react';
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 createInertiaApp({
     // ...existing code...
@@ -64,7 +64,7 @@ createInertiaApp({
 ```typescript
 // resources/js/app.ts
 import { createInertiaApp } from '@inertiajs/vue3';
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 createInertiaApp({
     // ...existing code...
@@ -108,8 +108,7 @@ import {
   makeRoute,
   isCurrentRoute,
   currentPath,
-  currentUrl,
-  configure
+  currentUrl
 } from '@tunbudi06/inertia-route-helper';
 ```
 
@@ -164,8 +163,9 @@ const relativeUrl = buildRoute('/api/users', { absolute: false });
 import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Use for navigation highlighting
-const isActive = isCurrentRoute('/dashboard');
-const isExact = isCurrentRoute('/dashboard', true);
+const isActive = isCurrentRoute('/dashboard'); // Partial match (pathname only)
+const isExact = isCurrentRoute('/dashboard', false, true); // Exact match (pathname only)
+const isActiveFullUrl = isCurrentRoute('https://example.com/dashboard', true); // Using full URL
 ```
 
 #### 5. Navigation Helpers
@@ -188,7 +188,7 @@ const url = currentUrl();   // 'https://example.com/dashboard/settings'
 | `routeUrl(def)` | Get URL string only |
 | `buildRoute(path, opts)` | Build URL with query/fragment |
 | `makeRoute(def)` | Build from object |
-| `isCurrentRoute(path, exact?)` | Check if route is active |
+| `isCurrentRoute(path, useHost?, exact?)` | Check if route is active |
 | `currentPath()` | Get current pathname |
 | `currentUrl()` | Get full current URL |
 | `configure(opts)` | Global configuration |
@@ -301,7 +301,10 @@ import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 const isDashboard = isCurrentRoute('/dashboard');
 
 // Exact match (only /dashboard)
-const isExactDashboard = isCurrentRoute('/dashboard', true);
+const isExactDashboard = isCurrentRoute('/dashboard', false, true);
+
+// Using full URL
+const isActiveFullUrl = isCurrentRoute('https://example.com/dashboard', true);
 ```
 
 ### Handle Form Submissions
@@ -336,10 +339,10 @@ routeUrl(dashboard())
 
 ---
 
-## ðŸ”§ Advanced Configuration
+## 🔧 Advanced Configuration
 
 ```typescript
-import { configure } from '@tunbudi06/inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper/init';
 
 // Optional: Configure global behavior
 configure({

@@ -279,7 +279,7 @@ it('should correctly identify active menu items', () => {
 
   expect(isCurrentRoute('/dashboard')).toBe(true);
   expect(isCurrentRoute('/dashboard/settings')).toBe(true);
-  expect(isCurrentRoute('/dashboard/settings/profile', true)).toBe(true);
+  expect(isCurrentRoute('/dashboard/settings/profile', false, true)).toBe(true);
   expect(isCurrentRoute('/users')).toBe(false);
 });
 ```

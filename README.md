@@ -164,7 +164,6 @@ import { page } from '@inertiajs/svelte';
 initRouteHelper(props); // or initRouteHelper($page)
 ```
 
-**See also:** [Complete Initialization Guide](./INIT_MODULE.md)
 
 ---
 
@@ -261,12 +260,13 @@ const url = makeRoute({
 
 ### Navigation Helpers
 
-#### `isCurrentRoute(path, exact?)`
+#### `isCurrentRoute(path, useHost?, exact?)`
 
 Check if a path matches the current browser location.
 
 **Parameters:**
 - `path` - Path to check (e.g., '/dashboard')
+- `useHost?` - Whether to include the baseUrl or not (default: false)
 - `exact?` - Whether to match exactly (default: false for partial match)
 
 **Returns:** `true` if path matches current location
@@ -276,9 +276,15 @@ import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Current URL: https://example.com/dashboard/settings
 
-isCurrentRoute('/dashboard');        // true (partial match)
-isCurrentRoute('/dashboard', true);  // false (not exact)
-isCurrentRoute('/dashboard/settings', true); // true (exact match)
+isCurrentRoute('/dashboard');                      // true (partial match)
+isCurrentRoute('/dashboard', false, true);         // false (not exact)
+isCurrentRoute('/dashboard/settings', false, true); // true (exact match)
+
+// With useHost=true (check against full URL)
+isCurrentRoute('/dashboard', true);                               // true
+isCurrentRoute('https://example.com/dashboard', true);            // true
+isCurrentRoute('https://example.com/dashboard/settings', true, true); // true (exact)
+isCurrentRoute('https://example.com/dashboard', true, true);      // false (not exact)
 
 // Use in components for active navigation
 const isActive = isCurrentRoute('/dashboard');
@@ -428,7 +434,8 @@ import { isCurrentRoute, currentPath, currentUrl } from '@tunbudi06/inertia-rout
 
 // Check if a route is active (for navigation highlighting)
 const isActive = isCurrentRoute('/dashboard'); // Partial match
-const isExactActive = isCurrentRoute('/dashboard', true); // Exact match
+const isExactActive = isCurrentRoute('/dashboard', false, true); // Exact match
+const isActiveFullUrl = isCurrentRoute('https://example.com/dashboard', true); // Using full URL
 
 // Get current path
 const path = currentPath();
@@ -509,12 +516,13 @@ const url = makeRoute({
 
 ### Navigation Functions
 
-#### `isCurrentRoute(path: string, exact?: boolean): boolean`
+#### `isCurrentRoute(path: string, useHost?: boolean, exact?: boolean): boolean`
 Check if a route matches the current path.
 
 ```typescript
-const isActive = isCurrentRoute('/dashboard'); // Partial match
-const isExact = isCurrentRoute('/dashboard', true); // Exact match
+const isActive = isCurrentRoute('/dashboard'); // Partial match (pathname only)
+const isExact = isCurrentRoute('/dashboard', false, true); // Exact match (pathname only)
+const isActiveFullUrl = isCurrentRoute('https://example.com/dashboard', true); // Using full URL
 ```
 
 #### `currentPath(): string`
@@ -581,7 +589,7 @@ export function Navigation() {
       
       <Link 
         href={routeUrl(profile({ id: userId }))}
-        className={isCurrentRoute(`/profile/${userId}`, true) ? 'active' : ''}
+        className={isCurrentRoute(`/profile/${userId}`, false, true) ? 'active' : ''}
       >
         Profile
       </Link>

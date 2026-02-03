@@ -1,4 +1,4 @@
-﻿﻿# API Reference - @tunbudi06/inertia-route-helper
+﻿﻿﻿# API Reference - @tunbudi06/inertia-route-helper
 
 Complete API documentation for all functions and types.
 
@@ -39,7 +39,7 @@ function initRouteHelper(data: any): void
 ```typescript
 // React/Vue - Pass props from createInertiaApp
 import { createInertiaApp } from '@inertiajs/react';
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 createInertiaApp({
   setup({ el, App, props }) {
@@ -50,7 +50,7 @@ createInertiaApp({
 
 // Svelte - Can use props or $page
 import { page } from '@inertiajs/svelte';
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 initRouteHelper(props);  // or
 initRouteHelper($page);
@@ -250,17 +250,18 @@ const url3 = makeRoute({
 
 ## Navigation Helpers
 
-### `isCurrentRoute(path, exact?)`
+### `isCurrentRoute(path, useHost?, exact?)`
 
 Check if a path matches the current browser location. Useful for highlighting active navigation items.
 
 **Signature:**
 ```typescript
-function isCurrentRoute(path: string, exact?: boolean): boolean
+function isCurrentRoute(path: string, useHost?: boolean, exact?: boolean): boolean
 ```
 
 **Parameters:**
 - `path` - Path to check (e.g., '/dashboard')
+- `useHost?` - Whether to include the baseUrl or not (default: `false`)
 - `exact?` - Whether to match exactly (default: `false` for partial match)
 
 **Returns:**
@@ -274,14 +275,21 @@ import { isCurrentRoute } from '@tunbudi06/inertia-route-helper';
 
 // Assuming current URL: https://example.com/dashboard/settings
 
-// Partial match (default)
-isCurrentRoute('/dashboard');         // true
-isCurrentRoute('/dashboard/settings'); // true
-isCurrentRoute('/users');              // false
+// Partial match (default) - uses pathname only
+isCurrentRoute('/dashboard');                      // true
+isCurrentRoute('/dashboard/settings');             // true
+isCurrentRoute('/users');                          // false
 
-// Exact match
-isCurrentRoute('/dashboard', true);          // false (not exact)
-isCurrentRoute('/dashboard/settings', true); // true (exact match)
+// Exact match - uses pathname only
+isCurrentRoute('/dashboard', false, true);         // false (not exact)
+isCurrentRoute('/dashboard/settings', false, true); // true (exact match)
+
+// Using full URL with useHost=true
+isCurrentRoute('/dashboard', true);                               // true
+isCurrentRoute('/dashboard/settings', true);                      // true
+isCurrentRoute('https://example.com/dashboard', true);            // true
+isCurrentRoute('https://example.com/dashboard/settings', true, true); // true (exact)
+isCurrentRoute('https://example.com/dashboard', true, true);      // false (not exact)
 
 // Use in React component
 function NavLink({ href, children }) {
@@ -404,7 +412,7 @@ function configure(options: RouteHelperConfig): void
 **Examples:**
 
 ```typescript
-import { configure } from '@tunbudi06/inertia-route-helper';
+import { configure } from '@tunbudi06/inertia-route-helper/init';
 
 // Basic configuration
 configure({
@@ -588,20 +596,24 @@ type RouteHelperConfig = {
 ## Complete Import Reference
 
 ```typescript
-// Functions
+// Route helper functions (main import)
 import {
-  initRouteHelper,
   route,
   routeUrl,
   buildRoute,
   makeRoute,
   isCurrentRoute,
   currentPath,
-  currentUrl,
+  currentUrl
+} from '@tunbudi06/inertia-route-helper';
+
+// Initialization functions (/init import)
+import {
+  initRouteHelper,
   configure,
   setBaseUrl,
   getBaseUrl
-} from '@tunbudi06/inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper/init';
 
 // Types
 import type {
