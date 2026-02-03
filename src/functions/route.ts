@@ -15,7 +15,7 @@ import { getBaseUrl, getConfig } from '../state';
  * ```
  */
 export function route<T extends AnyRoute>(routeDefinition: T): T {
-  const base = getBaseUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
+  const base = getBaseUrl();
   const cfg = getConfig();
 
   let url = base + routeDefinition.url;

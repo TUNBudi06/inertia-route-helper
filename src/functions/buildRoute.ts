@@ -37,7 +37,7 @@ export function buildRoute(
 
   // Prepend base URL if absolute
   if (absolute) {
-    const base = getBaseUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
+    const base = getBaseUrl();
     url = base + url;
   }
 

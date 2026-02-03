@@ -79,6 +79,8 @@ createInertiaApp({
 
 ### Laravel Setup (Required)
 
+> **⚠️ Important:** You must share `baseUrl` from Laravel for the helper to work properly. Without this, route functions will only return relative URLs (e.g., `/dashboard` instead of `https://example.com/dashboard`).
+
 **Share your base URL with Inertia:**
 
 ```php
@@ -321,21 +323,30 @@ function handleSubmit(formData: FormData) {
 
 ---
 
-## ðŸŒ Subfolder Deployments
+## 🌍 Subfolder Deployments
 
-If your app is deployed in a subfolder, just set your `APP_URL`:
+If your app is deployed in a subfolder, make sure your `APP_URL` in `.env` includes the full path:
 
 ```env
 # .env
 APP_URL=https://example.com/my-app
 ```
 
-The package automatically handles everything! All URLs will be prefixed correctly:
+**Not just:**
+```env
+APP_URL=https://example.com
+```
+
+As long as you've set up the [Laravel Setup](#laravel-setup-required) step above, the package automatically handles everything! All URLs will be prefixed correctly:
 
 ```typescript
 routeUrl(dashboard())
-// âœ… https://example.com/my-app/dashboard
+// ✅ https://example.com/my-app/dashboard
 ```
+
+> **Why can't it auto-detect the subpath?** 
+> 
+> The helper requires explicit configuration because it cannot reliably auto-detect subpaths from `window.location.pathname` - it's impossible to know where the subpath ends and the route begins (e.g., is `/my-app/dashboard` a subpath of `/my-app` or `/my-app/dashboard`?). This design ensures predictable behavior and forces proper configuration from Laravel.
 
 ---
 

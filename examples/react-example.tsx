@@ -183,8 +183,8 @@ export function PostsList({ posts: postList }: { posts: any[] }) {
 // Example with configuration
 export function App() {
   React.useEffect(() => {
-    // Optional: Configure the route helper
-    // This is usually not needed as it auto-detects from Inertia props
+    // Optional: Configure additional route helper settings
+    // Note: baseUrl should be set via initRouteHelper() in your app setup
     import('inertia-route-helper').then(({ configure }) => {
       configure({
         trailingSlash: false,

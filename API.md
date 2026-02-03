@@ -34,6 +34,27 @@ function initRouteHelper(data: any): void
 2. `page.props.baseUrl` - Svelte $page store
 3. `data.baseUrl` - Direct object
 
+**⚠️ Important for Subfolder Deployments:**
+
+If your app is deployed in a subfolder (e.g., `https://example.com/my-app`), you **must** share the `baseUrl` from Laravel:
+
+```php
+// app/Http/Middleware/HandleInertiaRequests.php
+public function share(Request $request): array
+{
+    return array_merge(parent::share($request), [
+        'baseUrl' => rtrim(config('app.url'), '/'),
+    ]);
+}
+```
+
+And ensure your `.env` includes the subpath:
+```env
+APP_URL=https://example.com/my-app
+```
+
+The helper cannot auto-detect subpaths from the browser URL. See [Troubleshooting](#troubleshooting) for details.
+
 **Examples:**
 
 ```typescript
@@ -636,5 +657,90 @@ All navigation helper functions are SSR-safe:
 - `currentUrl()` - Returns empty string in SSR context
 
 Core route building functions work in both SSR and client contexts.
+
+---
+
+## Troubleshooting
+
+### BaseUrl Not Including Subpath
+
+**Problem:** After calling `initRouteHelper(props)`, URLs don't include your application's subpath (e.g., getting `/dashboard` instead of `https://example.com/my-app/dashboard`).
+
+**Cause:** The route helper requires explicit baseUrl configuration. It does not auto-detect from the browser because it's impossible to distinguish where the subpath ends and the route begins.
+
+**Solution:**
+
+1. **Ensure Laravel shares the correct baseUrl** (Recommended):
+
+```php
+// app/Http/Middleware/HandleInertiaRequests.php
+public function share(Request $request): array
+{
+    return array_merge(parent::share($request), [
+        'baseUrl' => rtrim(config('app.url'), '/'),
+    ]);
+}
+```
+
+2. **Set your APP_URL with the subpath in `.env`**:
+
+```env
+APP_URL=https://example.com/my-app
+```
+
+**Not just:**
+```env
+APP_URL=https://example.com
+```
+
+3. **Alternative - Manual configuration** (if you can't modify Laravel):
+
+```typescript
+import { configure } from '@tunbudi06/inertia-route-helper/init';
+
+configure({
+  baseUrl: 'https://example.com/my-app'
+});
+```
+
+**Verify it's working:**
+
+```typescript
+import { getBaseUrl } from '@tunbudi06/inertia-route-helper/init';
+
+console.log('Current baseUrl:', getBaseUrl());
+// Should show: 'https://example.com/my-app'
+```
+
+---
+
+### How BaseUrl Detection Works
+
+The route helper requires explicit configuration of the base URL:
+
+**From Props (Required)**
+
+When you call `initRouteHelper(props)`, it extracts `baseUrl` from:
+1. `props.initialPage.props.baseUrl` (React/Vue with createInertiaApp)
+2. `page.props.baseUrl` (Svelte $page store)
+3. `props.baseUrl` (direct object)
+
+**From Manual Configuration**
+
+Alternatively, you can set it manually using `configure()` or `setBaseUrl()`:
+
+```typescript
+import { configure } from '@tunbudi06/inertia-route-helper/init';
+
+configure({
+  baseUrl: 'https://example.com/my-app'
+});
+```
+
+**If BaseUrl is Not Set**
+
+If no `baseUrl` is configured, route functions will return relative URLs (e.g., `/dashboard` instead of `https://example.com/dashboard`).
+
+**Best Practice:** Always pass `baseUrl` from Laravel via Inertia props to ensure correct behavior, especially for subfolder deployments.
 
 
