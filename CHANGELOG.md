@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2026-02-03
+
+### 🐛 Critical Bug Fix
+
+### Fixed
+- 🔥 **State Duplication Issue** - Fixed critical bug where `splitting: false` in tsup config caused duplicate state instances
+  - Previously, `/init` and main index had separate copies of state
+  - Calling `initRouteHelper()` would set baseUrl in init's state copy
+  - Calling `route()` would read from index's empty state copy
+  - **Solution**: Enabled code splitting (`splitting: true`) to create shared chunk
+  - Now all imports share the same state instance via `dist/chunk-*.js`
+- 📦 **Smaller Bundle Size** - Shared chunk eliminates duplicate code (bonus improvement)
+
+### Changed
+- 📁 **Test Organization** - Migrated all test files from `src/` to dedicated `test/` folder
+  - Moved `src/index.test.ts` → `test/index.test.ts`
+  - Moved `src/integration.test.ts` → `test/integration.test.ts`
+  - Updated `vitest.config.ts` to use `test/**/*.test.ts` pattern
+  - Cleaner source directory with only production code
+  - Test structure now mirrors `src/` structure
+  - All 65 tests passing ✅
+
+### Technical Details
+- Changed `splitting: false` to `splitting: true` in `tsup.config.ts`
+- Build now generates shared chunk for common code (state.ts)
+- Both entry points (`index.js` and `init.js`) import from shared chunk
+- Ensures consistent state across all package imports
+- Test files updated with correct relative imports (`../src/`)
+- Updated coverage exclusions to include `test/` folder
+
 ## [2.0.0] - 2026-02-03
 
 ### 🎉 Major Release - Modular Single-Function Architecture

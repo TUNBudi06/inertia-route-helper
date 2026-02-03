@@ -10,6 +10,7 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'dist/',
+        'test/',
         '**/*.test.ts',
         '**/*.spec.ts',
         'examples/',
@@ -17,6 +18,6 @@ export default defineConfig({
         'tsup.config.ts',
       ],
     },
-    include: ['src/**/*.{test,spec}.ts'],
+    include: ['test/**/*.{test,spec}.ts'],
   },
 });

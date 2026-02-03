@@ -8,7 +8,7 @@ export default defineConfig({
   clean: true,
   minify: 'terser',
   treeshake: true,
-  splitting: false,
+  splitting: true,
   terserOptions: {
     compress: {
       passes: 3,

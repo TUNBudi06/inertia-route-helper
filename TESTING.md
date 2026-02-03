@@ -1,22 +1,26 @@
 # 🧪 Testing Documentation
 
-Comprehensive test suite for **@tunbudi06/inertia-route-helper** v1.0.0
+Comprehensive test suite for **@tunbudi06/inertia-route-helper** v2.0.2
 
 ---
 
 ## 📊 Test Coverage
 
 ```
-✅ 72 tests passing
-✅ 3 test suites
+✅ 65 tests passing
+✅ 2 test suites
 ✅ 100% coverage of core functionality
 ```
 
-### Test Suites
+### Test Structure
 
-1. **store.test.ts** - 11 tests
-2. **index.test.ts** - 41 tests  
-3. **integration.test.ts** - 20 tests
+Tests are located in the `test/` folder, mirroring the `src/` structure:
+
+```
+test/
+├── index.test.ts         - Core route functions (45 tests)
+└── integration.test.ts   - Real-world scenarios (20 tests)
+```
 
 ---
 
@@ -48,23 +52,13 @@ npm run test:coverage
 
 ### Unit Tests
 
-#### **store.test.ts** - Configuration & State Management
-Tests for base URL management and configuration:
-
-- `getBaseUrl()` - Returns correct base URL
-- `setBaseUrl()` - Sets and sanitizes base URL
-- `configure()` - Merges configuration options
-- `getConfig()` - Returns current configuration
-- Trailing slash handling
-- Subfolder path handling
-
-#### **index.test.ts** - Core Route Functions
+#### **test/index.test.ts** - Core Route Functions (45 tests)
 Tests for all route building functions:
 
 **route() & routeUrl()**
 - Absolute URL generation
 - Property preservation
-- Window.location fallback
+- Empty baseUrl handling (returns relative URLs)
 - Trailing slash configuration
 - Subfolder base URL handling
 
@@ -99,7 +93,7 @@ Tests for all route building functions:
 
 ### Integration Tests
 
-#### **integration.test.ts** - Real-world Scenarios
+#### **test/integration.test.ts** - Real-world Scenarios (20 tests)
 
 **E-commerce Product Filtering**
 - Multiple filter parameters
