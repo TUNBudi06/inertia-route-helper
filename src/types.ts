@@ -21,3 +21,8 @@ export interface RouteHelperConfig {
   validateRoutes?: boolean;
 }
 
+export interface BuildRouteOptions {
+  query?: QueryParams;
+  fragment?: string;
+  absolute?: boolean;
+}

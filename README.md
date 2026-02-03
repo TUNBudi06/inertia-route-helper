@@ -25,9 +25,11 @@ Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for su
 - 🎨 **TypeScript First** - Full type safety and IntelliSense support
 - ⚡ **Inertia.js v2** - Built for the latest Inertia.js version
 - 🌐 **SSR Safe** - Works perfectly with server-side rendering
-- 🪶 **Lightweight** - Only 1.73 KB minified (~650 bytes gzipped)
+- 🪶 **Lightweight** - Minimal bundle size
 - ⚙️ **Configurable** - Customize behavior to fit your needs
-- ✅ **Fully Tested** - 78 comprehensive tests with 100% coverage
+- 📦 **Modular Architecture** - One function per file for easy reading
+- 🔧 **Separate Init Module** - `/init` import for setup, main import for usage
+- ✅ **Fully Tested** - Comprehensive test coverage
 - 📚 **Complete Documentation** - Detailed API reference and examples
 
 ---
@@ -72,7 +74,7 @@ npm install @tunbudi06/inertia-route-helper
 ```typescript
 // resources/js/app.tsx (React) or resources/js/app.ts (Vue/Svelte)
 import { createInertiaApp } from '@inertiajs/react'; // or vue3/svelte
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 createInertiaApp({
     resolve: (name) => {
@@ -86,6 +88,8 @@ createInertiaApp({
     },
 });
 ```
+
+> **💡 New in v2.0:** Import initialization functions from `/init` for cleaner separation. Route helper functions from main import.
 
 ### Laravel Setup (Required)
 
@@ -135,6 +139,8 @@ console.log(searchUrl); // https://example.com/search?q=inertia&page=2#results
 
 Initialize the route helper with Inertia props. Automatically extracts `baseUrl` from various data structures.
 
+> **💡 Import from `/init`:** This function is available from `@tunbudi06/inertia-route-helper/init` for better tree shaking.
+
 **Parameters:**
 - `data` - Can be props from `createInertiaApp`, Svelte `$page` store, or any object containing baseUrl
 
@@ -144,7 +150,7 @@ Initialize the route helper with Inertia props. Automatically extracts `baseUrl`
 - `data.baseUrl` (direct object)
 
 ```typescript
-import { initRouteHelper } from '@tunbudi06/inertia-route-helper';
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
 
 // React/Vue - Pass props from createInertiaApp
 createInertiaApp({
@@ -157,6 +163,8 @@ createInertiaApp({
 import { page } from '@inertiajs/svelte';
 initRouteHelper(props); // or initRouteHelper($page)
 ```
+
+**See also:** [Complete Initialization Guide](./INIT_MODULE.md)
 
 ---
 

@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2026-02-03
+
+### 🎉 Major Release - Modular Single-Function Architecture
+
+### Added
+- 🎯 **One Function Per File** - Each function in its own file for maximum readability and maintainability
+- 📦 **Separate `/init` Module** - Dedicated import path for initialization and configuration functions
+- 📚 **Comprehensive Documentation** - Complete guides and examples
+- 🧪 **Extended Test Coverage** - Comprehensive tests with 100% coverage
+- 📖 **Enhanced JSDoc** - Complete inline documentation for all functions
+- 🔧 **State Management** - Centralized state in `state.ts` for clean architecture
+
+### Changed
+- ⚠️ **BREAKING**: Functions moved to separate files with dedicated directories
+  - `src/functions/` - Contains route helper functions (route, buildRoute, etc.)
+  - `src/init-functions/` - Contains initialization functions (initRouteHelper, configure)
+  - `src/state.ts` - Centralized state management
+- 📦 **Import Structure**:
+  - Main: `import { route, buildRoute } from '@tunbudi06/inertia-route-helper'`
+  - Init: `import { initRouteHelper, configure } from '@tunbudi06/inertia-route-helper/init'`
+- 🔧 **Cleaner Architecture** - Modular design with single responsibility per file
+- 🪶 **Better Organization** - Functions grouped by purpose in dedicated directories
+
+### Architecture
+
+```
+src/
+├── functions/          # Route helper functions
+│   ├── route.ts
+│   ├── routeUrl.ts
+│   ├── buildRoute.ts
+│   ├── buildQueryString.ts
+│   ├── makeRoute.ts
+│   ├── isCurrentRoute.ts
+│   ├── currentPath.ts
+│   ├── currentUrl.ts
+│   └── assetUrl.ts
+├── init-functions/     # Initialization functions
+│   ├── initRouteHelper.ts
+│   └── configure.ts
+├── state.ts           # Centralized state management
+├── types.ts           # TypeScript type definitions
+├── index.ts           # Main exports (route functions)
+└── init.ts            # Init exports (initialization)
+```
+
+### Migration Guide
+
+**Setup (in app.tsx/app.ts):**
+```typescript
+import { initRouteHelper, configure } from '@tunbudi06/inertia-route-helper/init';
+
+createInertiaApp({
+  setup({ el, App, props }) {
+    initRouteHelper(props);
+    // ...
+  }
+});
+```
+
+**Usage (in components):**
+```typescript
+import { route, buildRoute, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
+
+const url = route({ url: '/dashboard' }).url;
+```
+
+### Benefits
+- ✅ Maximum readability - one function per file
+- ✅ Easy to find and modify specific functions
+- ✅ Better code organization - grouped by purpose
+- ✅ Cleaner imports - separate setup from usage
+- ✅ Better maintainability - single responsibility principle
+- ✅ Still lightweight and fully tested
+
 ## [1.0.0] - 2026-01-30
 
 ### 🎉 Major Release - Inertia.js v2 Support

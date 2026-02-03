@@ -7,10 +7,8 @@ import {
   isCurrentRoute,
   currentPath,
   currentUrl,
-  configure,
-  setBaseUrl,
-  getBaseUrl,
 } from './index';
+import { configure, setBaseUrl, getBaseUrl } from './init';
 
 // Mock the router
 vi.mock('@inertiajs/core', () => ({

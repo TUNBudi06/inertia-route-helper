@@ -1,26 +1,75 @@
 # Examples
 
-This directory contains example usage of `inertia-route-helper` with different frameworks.
+This directory contains example usage of `@tunbudi06/inertia-route-helper` with different frameworks.
 
-## React Example
+## Setup Examples (v2.0+)
 
-See `react-example.tsx` for usage with React and TypeScript.
+**New in v2.0:** Initialization functions are imported from `/init` for better tree shaking.
 
-## Vue Example
+- `react-setup.tsx` - Complete React + Inertia.js setup
+- `vue-setup.ts` - Complete Vue 3 + Inertia.js setup
+- `svelte-setup.ts` - Complete Svelte + Inertia.js setup
 
-See `vue-example.vue` for usage with Vue 3 Composition API.
+## Usage Examples
 
-## Svelte Example
+- `react-example.tsx` - React components using route helper
+- `vue-example.vue` - Vue 3 components using route helper
+- `svelte-example.svelte` - Svelte components using route helper
 
-See `svelte-example.svelte` for usage with Svelte.
+## Quick Start
 
-## Running Examples
+### 1. Install the Package
 
-These are code examples only. To use them in your project:
+```bash
+npm install @tunbudi06/inertia-route-helper
+```
 
-1. Install the package: `npm install inertia-route-helper`
-2. Set up your Laravel backend to share `baseUrl`
-3. Import and use the functions in your components
+### 2. Initialize in Your App Setup
+
+**React:**
+```typescript
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
+
+createInertiaApp({
+  setup({ el, App, props }) {
+    initRouteHelper(props);
+    // ...
+  }
+});
+```
+
+**Vue:**
+```typescript
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
+
+createInertiaApp({
+  setup({ el, App, props, plugin }) {
+    initRouteHelper(props);
+    // ...
+  }
+});
+```
+
+**Svelte:**
+```typescript
+import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init';
+
+createInertiaApp({
+  setup({ el, App, props }) {
+    initRouteHelper(props);
+    // ...
+  }
+});
+```
+
+### 3. Use in Components
+
+```typescript
+import { route, buildRoute, isCurrentRoute } from '@tunbudi06/inertia-route-helper';
+
+// Use the route helper functions in your components
+const dashboardUrl = route({ url: '/dashboard' }).url;
+```
 
 ## Laravel Setup
 

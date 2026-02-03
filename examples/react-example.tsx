@@ -6,7 +6,7 @@ import {
   buildRoute,
   isCurrentRoute,
   currentPath
-} from 'inertia-route-helper';
+} from '@tunbudi06/inertia-route-helper';
 
 // Assuming you have Ziggy/Wayfinder routes
 import { dashboard, profile, posts, search } from '@/routes';
