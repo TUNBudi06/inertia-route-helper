@@ -1,7 +1,7 @@
 {
   "name": "@tunbudi06/inertia-route-helper",
-  "version": "2.0.2",
-  "description": "Powerful routing helper for Inertia.js v2 apps with Wayfinder/Ziggy - supports subfolder deployments, query parameters, and route validation",
+  "version": "3.0.0",
+  "description": "Powerful routing helper for Inertia.js v2 and v3 apps with Wayfinder/Ziggy - supports subfolder deployments, query parameters, subfolder deduplication, and route validation",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -48,10 +48,10 @@
   "author": "TUNBudi06",
   "license": "MIT",
   "peerDependencies": {
-    "@inertiajs/core": "^2.0.0"
+    "@inertiajs/core": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@inertiajs/core": "^2.0.0",
+    "@inertiajs/core": "^3.0.0",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
     "esbuild-plugin-compress": "^1.0.1",

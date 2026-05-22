@@ -111,6 +111,16 @@ const route = route(dashboard());
 // { url: 'https://example.com/dashboard', ...ziggyProps }
 ```
 
+> **🔄 Subfolder Deduplication**
+> When `baseUrl` is a subfolder (e.g., `http://localhost/myapp`) and the route path already contains that subfolder, the helper automatically deduplicates:
+>
+> ```typescript
+> // baseUrl = 'http://localhost/myapp'
+> const route = route({ url: '/myapp/dashboard', method: 'GET' });
+> // { url: 'http://localhost/myapp/dashboard', method: 'GET' }
+> // NOT: 'http://localhost/myapp/myapp/dashboard'
+> ```
+
 ---
 
 ### `routeUrl(routeDefinition)`
@@ -216,6 +226,19 @@ const url5 = buildRoute('/search', {
 });
 // 'https://example.com/search?q=test'
 ```
+
+> **🔄 Subfolder Deduplication**
+> `buildRoute()` automatically prevents URL doubling when the path already contains the subfolder:
+>
+> ```typescript
+> // baseUrl = 'http://localhost/subfolder/public'
+> const url = buildRoute('/subfolder/public/dashboard');
+> // 'http://localhost/subfolder/public/dashboard'
+> // NOT: 'http://localhost/subfolder/public/subfolder/public/dashboard'
+>
+> const url2 = buildRoute('/dashboard');
+> // 'http://localhost/subfolder/public/dashboard' (normal behavior)
+> ```
 
 ---
 

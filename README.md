@@ -6,9 +6,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-**Powerful routing helper for Inertia.js v2 applications**
+**Powerful routing helper for Inertia.js v2 & v3 applications**
 
-Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for subfolder deployments, query parameters, and route validation.
+Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for subfolder deployments, query parameters, subfolder path deduplication, and route validation.
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [API Reference](#-api-reference) • [Examples](#-examples)
 
@@ -23,7 +23,8 @@ Work seamlessly with Laravel Ziggy or Wayfinder routes, with full support for su
 - 🔍 **Query Parameters** - Build routes with query strings effortlessly
 - 🎯 **Route Validation** - Check if routes match the current path
 - 🎨 **TypeScript First** - Full type safety and IntelliSense support
-- ⚡ **Inertia.js v2** - Built for the latest Inertia.js version
+- ⚡ **Inertia.js v2 & v3** - Works seamlessly with both versions
+- 🔄 **Subfolder Deduplication** - Prevents URL doubling when routes already include the subfolder path (essential for Inertia v3 deployed apps)
 - 🌐 **SSR Safe** - Works perfectly with server-side rendering
 - 🪶 **Lightweight** - Minimal bundle size
 - ⚙️ **Configurable** - Customize behavior to fit your needs
@@ -89,7 +90,7 @@ createInertiaApp({
 });
 ```
 
-> **💡 New in v2.0:** Import initialization functions from `/init` for cleaner separation. Route helper functions from main import.
+> **💡 Import from `/init`:** Import initialization functions from `/init` for cleaner separation. Route helper functions from main import.
 
 ### Laravel Setup (Required)
 
@@ -691,6 +692,25 @@ const url = routeUrl(dashboard());
 // Not just: https://example.com/dashboard
 ```
 
+### 🔄 Smart Subfolder Deduplication (v3.0.0+)
+
+When deploying in subfolders, some routing libraries (Ziggy, Wayfinder) may generate route paths that already include the subfolder path. This helper **automatically detects and deduplicates** to prevent URL doubling:
+
+```typescript
+// baseUrl = 'http://localhost/myapp'
+
+// Route already includes subfolder — automatically deduplicated
+const url = routeUrl({ url: '/myapp/dashboard' });
+// ✅ 'http://localhost/myapp/dashboard'
+// ❌ Not: 'http://localhost/myapp/myapp/dashboard'
+
+// Route without subfolder — works normally
+const url2 = routeUrl({ url: '/dashboard' });
+// 'http://localhost/myapp/dashboard'
+```
+
+This is especially important for **Inertia v3** apps where the base URL's subfolder path may be included in route definitions by default.
+
 ---
 
 ## 🔧 TypeScript Support
@@ -744,7 +764,7 @@ MIT © [TUNBudi06](https://github.com/TUNBudi06)
 
 ## 🙏 Acknowledgments
 
-- Built for [Inertia.js](https://inertiajs.com/) v2
+- Built for [Inertia.js](https://inertiajs.com/) v2 & v3
 - Works with [Ziggy](https://github.com/tighten/ziggy) and [Wayfinder](https://github.com/glhd/wayfinder)
 - Inspired by the Laravel and Inertia.js communities
 

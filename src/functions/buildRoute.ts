@@ -1,10 +1,11 @@
 import type { BuildRouteOptions } from '../types';
-import { getBaseUrl, getConfig } from '../state';
+import { getConfig, resolveBasePath } from '../state';
 import { buildQueryString } from './buildQueryString';
 
 /**
  * Build a complete URL with query parameters and fragment
- * Flexible URL builder with full control over all URL components
+ * Flexible URL builder with full control over all URL components.
+ * Automatically deduplicates subfolder paths to prevent URL doubling.
  *
  * @param path - Base path (e.g., '/search' or '/users/123')
  * @param options - Optional configuration
@@ -25,6 +26,10 @@ import { buildQueryString } from './buildQueryString';
  * // Relative URL
  * buildRoute('/api/users', { absolute: false });
  * // Returns: '/api/users'
+ *
+ * // Subfolder path deduplication (when route already contains the subfolder):
+ * buildRoute('/subfolder/public/dashboard');
+ * // Returns: 'http://localhost/subfolder/public/dashboard' (not duplicated)
  * ```
  */
 export function buildRoute(
@@ -35,10 +40,9 @@ export function buildRoute(
 
   let url = path;
 
-  // Prepend base URL if absolute
+  // Prepend base URL if absolute (with subfolder path deduplication)
   if (absolute) {
-    const base = getBaseUrl();
-    url = base + url;
+    url = resolveBasePath(url);
   }
 
   // Append query parameters

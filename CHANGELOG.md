@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-05-22
+
+### 🎉 Inertia.js v3 Support + Subfolder Deduplication
+
+### Added
+- 🚀 **Inertia.js v3 Support** - Peer dependency updated to `^2.0.0 || ^3.0.0`
+  - Works seamlessly with both Inertia v2 and v3 applications
+  - No API changes required — same familiar interface
+  - Full backward compatibility
+- 🧠 **Smart Subfolder Deduplication** - Route paths that already contain the base URL's subfolder path are now automatically deduplicated
+  - Previously: `route({ url: '/myapp/dashboard' })` with baseUrl `http://localhost/myapp` would produce `http://localhost/myapp/myapp/dashboard`
+  - Now: Correctly produces `http://localhost/myapp/dashboard`
+  - Essential for Inertia v3 which includes subfolder paths by default in deployed apps
+  - Works with Ziggy, Wayfinder, and any route definition
+- 🧪 **9 new tests** - Comprehensive coverage for subfolder dedup scenarios
+- 📁 **`docs/` folder** - Added dedicated documentation folder with AI-friendly docs
+
+### Changed
+- ⬆️ **Updated dev dependency** to `@inertiajs/core@^3.0.0` for testing against latest
+- 🔧 **`resolveBasePath()` internal utility** - Added to `src/state.ts` for centralized URL resolution with deduplication logic
+  - Extracts base URL pathname via `new URL()`
+  - Checks if route path already starts with base path (followed by `/` or exact match)
+  - Strips only the origin portion, keeping the full route path intact
+- ♻️ **`route()` and `buildRoute()` functions** - Updated to use `resolveBasePath()` instead of raw string concatenation
+  - `assetUrl()` benefits automatically since it wraps `buildRoute()`
+- 📚 **Updated documentation** - All docs updated for Inertia v3 compatibility
+
+### Technical Details
+- Edge-case safe: `/myapp` base path does NOT match `/myappointments` (requires `/` separator after base path)
+- Works with any subfolder depth (e.g., `/subfolder/public/deeper`)
+- Zero bundle size increase (minor code addition in shared chunk)
+- All 74 tests passing ✅
+
+### Migration from v2.x
+
+No migration steps needed. Simply update:
+```bash
+npm install @tunbudi06/inertia-route-helper@latest
+```
+
+If you're using Inertia v3, the upgrade is seamless — same API, same imports.
+
+## [2.1.0] - 2026-05-22
+
+### ✨ Subfolder Path Deduplication
+
+### Added
+- 🧠 **Smart Subfolder Deduplication** - Route paths that already contain the base URL's subfolder path are now automatically deduplicated
+  - Previously: `route({ url: '/myapp/dashboard' })` with baseUrl `http://localhost/myapp` would produce `http://localhost/myapp/myapp/dashboard`
+  - Now: Correctly produces `http://localhost/myapp/dashboard`
+  - Works with Ziggy, Wayfinder, and any route definition
+- 🧪 **New tests added** - Comprehensive coverage for subfolder dedup scenarios
+- 📁 **`docs/` folder** - Added dedicated documentation folder with AI-friendly docs
+
+### Changed
+- 🔧 **`resolveBasePath()` internal utility** - Added to `src/state.ts` for centralized URL resolution with deduplication logic
+  - Extracts base URL pathname via `new URL()`
+  - Checks if route path already starts with base path (followed by `/` or exact match)
+  - Strips only the origin portion, keeping the full route path intact
+- ♻️ **`route()` and `buildRoute()` functions** - Updated to use `resolveBasePath()` instead of raw string concatenation
+  - `assetUrl()` benefits automatically since it wraps `buildRoute()`
+- 📚 **Updated API docs** - Added deduplication examples and feature documentation
+
+### Technical Details
+- Edge-case safe: `/myapp` base path does NOT match `/myappointments` (requires `/` separator after base path)
+- Works with any subfolder depth (e.g., `/subfolder/public/deeper`)
+- Zero bundle size increase (minor code addition in shared chunk)
+- All 65 existing tests continue to pass ✅
+
 ## [2.0.2] - 2026-02-03
 
 ### 🐛 Critical Bug Fix

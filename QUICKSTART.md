@@ -1,6 +1,6 @@
 ﻿﻿# 🚀 Quick Start Guide - Inertia Route Helper
 
-Get started with **@tunbudi06/inertia-route-helper** in just a few minutes!
+Get started with **@tunbudi06/inertia-route-helper** (supports Inertia.js v2 & v3) in just a few minutes!
 
 ---
 

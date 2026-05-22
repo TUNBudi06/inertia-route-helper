@@ -410,4 +410,60 @@ describe('route functions', () => {
       global.window = originalWindow;
     });
   });
+
+  describe('subfolder deduplication', () => {
+    it('should deduplicate subfolder path in route()', () => {
+      setBaseUrl('http://localhost/myapp');
+      const result = route({ url: '/myapp/dashboard' });
+      expect(result.url).toBe('http://localhost/myapp/dashboard');
+    });
+
+    it('should not double when route path does not include subfolder', () => {
+      setBaseUrl('http://localhost/myapp');
+      const result = route({ url: '/dashboard' });
+      expect(result.url).toBe('http://localhost/myapp/dashboard');
+    });
+
+    it('should deduplicate subfolder in buildRoute()', () => {
+      setBaseUrl('http://localhost/subfolder/public');
+      const url = buildRoute('/subfolder/public/dashboard');
+      expect(url).toBe('http://localhost/subfolder/public/dashboard');
+    });
+
+    it('should handle exact base path match', () => {
+      setBaseUrl('http://localhost/myapp');
+      const url = buildRoute('/myapp');
+      expect(url).toBe('http://localhost/myapp');
+    });
+
+    it('should not strip similar prefix that is not a subfolder', () => {
+      setBaseUrl('http://localhost/myapp');
+      const url = buildRoute('/myappointments');
+      expect(url).toBe('http://localhost/myapp/myappointments');
+    });
+
+    it('should work with routeUrl() via subfolder dedup', () => {
+      setBaseUrl('http://localhost/myapp');
+      const url = routeUrl({ url: '/myapp/users/42' });
+      expect(url).toBe('http://localhost/myapp/users/42');
+    });
+
+    it('should work with makeRoute() via subfolder dedup', () => {
+      setBaseUrl('http://localhost/myapp');
+      const url = makeRoute({ url: '/myapp/search', query: { q: 'test' } });
+      expect(url).toBe('http://localhost/myapp/search?q=test');
+    });
+
+    it('should deduplicate deep subfolder paths', () => {
+      setBaseUrl('http://localhost/a/b/c');
+      const url = buildRoute('/a/b/c/dashboard');
+      expect(url).toBe('http://localhost/a/b/c/dashboard');
+    });
+
+    it('should not deduplicate when baseUrl has no subfolder', () => {
+      setBaseUrl('http://localhost');
+      const url = buildRoute('/dashboard');
+      expect(url).toBe('http://localhost/dashboard');
+    });
+  });
 });
