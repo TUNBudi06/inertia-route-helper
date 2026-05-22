@@ -150,14 +150,32 @@ function currentUrl(): string
 
 Builds an absolute URL for an asset path. Wraps `buildRoute()`.
 
+**Smart absolute URL detection**:
+- **Relative paths** (`/images/logo.png`, `css/style.css`) → prepends baseUrl
+- **Absolute URLs** (`https://cdn.example.com/img.png`, `//cdn.net/script.js`, `data:...`) → passes through as-is
+
 ```typescript
 function assetUrl(assetPath: string, options?: BuildRouteOptions): string
 ```
 
-**Example:**
+**Examples:**
 ```typescript
+// Relative paths get baseUrl prepended
 assetUrl('/images/logo.png')
 // → 'https://example.com/images/logo.png'
+
+assetUrl('css/styles.css')
+// → 'https://example.com/css/styles.css'
+
+// Absolute URLs pass through as-is
+assetUrl('https://cdn.example.com/banner.png')
+// → 'https://cdn.example.com/banner.png'
+
+assetUrl('//cdn.example.com/script.js')
+// → '//cdn.example.com/script.js'
+
+assetUrl('data:image/svg+xml;utf8,<svg></svg>')
+// → 'data:image/svg+xml;utf8,<svg></svg>'
 ```
 
 ---

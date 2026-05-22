@@ -16,7 +16,10 @@ All notable changes to this project will be documented in this file.
   - Now: Correctly produces `http://localhost/myapp/dashboard`
   - Essential for Inertia v3 which includes subfolder paths by default in deployed apps
   - Works with Ziggy, Wayfinder, and any route definition
-- 🧪 **9 new tests** - Comprehensive coverage for subfolder dedup scenarios
+- 🧠 **Smart `assetUrl()`** - Detects absolute URLs (http://, https://, //, data:, blob:, etc.) and passes them through as-is instead of prepending baseUrl
+  - Relative paths still get baseUrl prepended as before
+  - Perfect for mixed local/CDN assets
+- 🧪 **17 new tests** - Comprehensive coverage for subfolder dedup and assetUrl scenarios
 - 📁 **`docs/` folder** - Added dedicated documentation folder with AI-friendly docs
 
 ### Changed
@@ -33,7 +36,7 @@ All notable changes to this project will be documented in this file.
 - Edge-case safe: `/myapp` base path does NOT match `/myappointments` (requires `/` separator after base path)
 - Works with any subfolder depth (e.g., `/subfolder/public/deeper`)
 - Zero bundle size increase (minor code addition in shared chunk)
-- All 74 tests passing ✅
+- All 82 tests passing ✅
 
 ### Migration from v2.x
 

@@ -7,6 +7,7 @@ import {
   isCurrentRoute,
   currentPath,
   currentUrl,
+  assetUrl,
 } from '../src/index';
 import { configure, setBaseUrl } from '../src/init';
 
@@ -464,6 +465,52 @@ describe('route functions', () => {
       setBaseUrl('http://localhost');
       const url = buildRoute('/dashboard');
       expect(url).toBe('http://localhost/dashboard');
+    });
+  });
+
+  describe('assetUrl', () => {
+    beforeEach(() => {
+      setBaseUrl('https://example.com');
+    });
+
+    it('should prepend baseUrl to relative paths', () => {
+      const url = assetUrl('/images/logo.png');
+      expect(url).toBe('https://example.com/images/logo.png');
+    });
+
+    it('should handle path without leading slash', () => {
+      const url = assetUrl('css/styles.css');
+      expect(url).toBe('https://example.com/css/styles.css');
+    });
+
+    it('should pass through absolute http URL as-is', () => {
+      const url = assetUrl('http://localhost/other/wow');
+      expect(url).toBe('http://localhost/other/wow');
+    });
+
+    it('should pass through absolute https URL as-is', () => {
+      const url = assetUrl('https://cdn.example.com/banner.png');
+      expect(url).toBe('https://cdn.example.com/banner.png');
+    });
+
+    it('should pass through protocol-relative URL as-is', () => {
+      const url = assetUrl('//cdn.example.com/script.js');
+      expect(url).toBe('//cdn.example.com/script.js');
+    });
+
+    it('should pass through data URI as-is', () => {
+      const url = assetUrl('data:image/svg+xml;utf8,<svg></svg>');
+      expect(url).toBe('data:image/svg+xml;utf8,<svg></svg>');
+    });
+
+    it('should handle query params with relative paths', () => {
+      const url = assetUrl('/images/logo.png', { query: { v: 2 } });
+      expect(url).toBe('https://example.com/images/logo.png?v=2');
+    });
+
+    it('should ignore options for absolute URLs', () => {
+      const url = assetUrl('https://cdn.example.com/image.png', { query: { v: 2 } });
+      expect(url).toBe('https://cdn.example.com/image.png');
     });
   });
 });
